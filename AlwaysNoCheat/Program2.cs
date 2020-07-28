@@ -10,6 +10,7 @@ namespace AlwaysNoCheat
 	{
 		public static readonly string LOGCONFIG = @"CSR\configs\logconfig.txt";
 		
+		// 主入口实现
 		public static void init(MCCSAPI api) {
 			// 读取配置 根据配置设置hook
 			ConfigReader cf = new ConfigReader(LOGCONFIG);
