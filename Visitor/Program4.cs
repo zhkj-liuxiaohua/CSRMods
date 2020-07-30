@@ -60,22 +60,24 @@ namespace Visitor
 			namexuids.Clear();
 			string ols = mapi.getOnLinePlayers();
 			if (!string.IsNullOrEmpty(ols)) {
-				var ser = new JavaScriptSerializer();
-				ArrayList ol = ser.Deserialize<ArrayList>(ols);
-				foreach (Dictionary<string, object> d in ol) {
-					object tname, tuuid, txuid;
-					if (d.TryGetValue("playername", out tname)) {
-						if (d.TryGetValue("uuid", out tuuid)) {
-							nameuuids[tname.ToString()] = tuuid.ToString();
-							if (tname.ToString() == name) {
-								uuid = tuuid.ToString();
+				try {
+					var ser = new JavaScriptSerializer();
+					ArrayList ol = ser.Deserialize<ArrayList>(ols);
+					foreach (Dictionary<string, object> d in ol) {
+						object tname, tuuid, txuid;
+						if (d.TryGetValue("playername", out tname)) {
+							if (d.TryGetValue("uuid", out tuuid)) {
+								nameuuids[tname.ToString()] = tuuid.ToString();
+								if (tname.ToString() == name) {
+									uuid = tuuid.ToString();
+								}
+							}
+							if (d.TryGetValue("xuid", out txuid)) {
+								namexuids[tname.ToString()] = txuid.ToString();
 							}
 						}
-						if (d.TryGetValue("xuid", out txuid)) {
-							namexuids[tname.ToString()] = txuid.ToString();
-						}
 					}
-				}
+				} catch(Exception e){Console.WriteLine(e.StackTrace);}
 			}
 			return uuid;
 		}
@@ -87,21 +89,23 @@ namespace Visitor
 				wl = File.ReadAllText("whitelist.json");
 			} catch{}
 			var ser = new JavaScriptSerializer();
-			if (string.IsNullOrEmpty(wl)) {
-				var wlal = ser.Deserialize<ArrayList>(wl);
-				if (wlal != null && wlal.Count > 0) {
-					foreach (Dictionary<string, object> d in wlal) {
-						object dname;
-						if (d.TryGetValue("name", out dname)) {
-							if (dname.ToString() == name) {	// 找到
-								object dxuid;
-								if (d.TryGetValue("xuid", out dxuid)) {
-									return dxuid.ToString();
+			if (!string.IsNullOrEmpty(wl)) {
+				try {
+					var wlal = ser.Deserialize<ArrayList>(wl);
+					if (wlal != null && wlal.Count > 0) {
+						foreach (Dictionary<string, object> d in wlal) {
+							object dname;
+							if (d.TryGetValue("name", out dname)) {
+								if (dname.ToString() == name) {	// 找到
+									object dxuid;
+									if (d.TryGetValue("xuid", out dxuid)) {
+										return dxuid.ToString();
+									}
 								}
 							}
 						}
 					}
-				}
+				}catch(Exception e){Console.WriteLine(e.StackTrace);}
 			}
 			return null;
 		}
@@ -162,49 +166,51 @@ namespace Visitor
 			
 			// 监听后台指令
 			api.addBeforeActListener(EventKey.onServerCmd, x => {
-			                         	var e = BaseEvent.getFrom(x) as ServerCmdEvent;
-			                         	string scmd = e.cmd.Trim();
-			                         	if (scmd.ToLower().IndexOf("visitor") == 0) {	// 找到
-			                         		string [] cmds = scmd.Split(' ');
-			                         		if (cmds.Length > 1){
-			                         			string pname = scmd.Substring(7).Trim().Trim('"');
-			                         			string xuid = null;
-			                         			if (!string.IsNullOrEmpty(xuid = getXUID(pname))) {
-			                         				// 在线降权
-			                         				if (visitorPlayer(xuid)) {
-			                         					tellraw(pname, "您已被降级权限为访客。");
-			                         					api.logout("Visited : " + pname);
-			                         					return false;
-			                         				}
-			                         			}else if (!string.IsNullOrEmpty(xuid = getLeftXUID(pname))) {
-			                         				// 离线降权
-			                         				if (visitorPlayer(xuid)) {
-			                         					api.logout("玩家 " + pname + " 已被降级权限为访客。");
-			                         					return false;
-			                         				}
-			                         			} else {
-			                         				api.logout("未能找到对应玩家。");
-			                         			}
-			                         		} else {
-			                         			api.logout("[vistor] 参数过少。用法：visitor [playername]");
-			                         		}
-			                         		return false;
-			                         	}
-			                         	return true;
-			                         });
+				var e = BaseEvent.getFrom(x) as ServerCmdEvent;
+				string scmd = e.cmd.Trim();
+				if (scmd.ToLower().IndexOf("visitor") == 0) {	// 可能找到
+					string[] cmds = scmd.Split(' ');
+					if (cmds[0].ToLower() == "visitor") {	// 找到
+						if (cmds.Length > 1) {
+							string pname = scmd.Substring(7).Trim().Trim('"');
+							string xuid = null;
+							if (!string.IsNullOrEmpty(xuid = getXUID(pname))) {
+								// 在线降权
+								if (visitorPlayer(xuid)) {
+									tellraw(pname, "您已被降级权限为访客。");
+									api.logout("Visited : " + pname);
+									return false;
+								}
+							} else if (!string.IsNullOrEmpty(xuid = getLeftXUID(pname))) {
+								// 离线降权
+								if (visitorPlayer(xuid)) {
+									api.logout("玩家 " + pname + " 已被降级权限为访客。");
+									return false;
+								}
+							} else {
+								api.logout("未能找到对应玩家。");
+							}
+						} else {
+							api.logout("[vistor] 参数过少。用法：visitor [playername]");
+						}
+						return false;
+					}
+				}
+				return true;
+			});
 			
 			// 离开监听
 			api.addAfterActListener(EventKey.onPlayerLeft, x => {
-			                        	var e = BaseEvent.getFrom(x) as PlayerLeftEvent;
-			                        	string uuid, xuid;
-			                        	if (nameuuids.TryGetValue(e.playername, out uuid)) {
-			                        		nameuuids.Remove(e.playername);
-			                        	}
-			                        	if (namexuids.TryGetValue(e.playername, out xuid)) {
-			                        		namexuids.Remove(e.playername);
-			                        	}
-			                        	return true;
-			                        });
+				var e = BaseEvent.getFrom(x) as PlayerLeftEvent;
+				string uuid, xuid;
+				if (nameuuids.TryGetValue(e.playername, out uuid)) {
+					nameuuids.Remove(e.playername);
+				}
+				if (namexuids.TryGetValue(e.playername, out xuid)) {
+					namexuids.Remove(e.playername);
+				}
+				return true;
+			});
 		}
 	}
 }
