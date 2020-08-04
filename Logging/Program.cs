@@ -54,8 +54,11 @@ namespace Logging
 	}
 	
 	class Program {
-		private static MCCSAPI mcapi = null;
+		private static MCCSAPI mapi = null;
 		
+		/// <summary>
+		/// 固定配置文件所在路径
+		/// </summary>
 		static readonly string LOGCONFIG = @"CSR\configs\logconfig.txt";
 		
 		// 返回一个时间前缀
@@ -87,7 +90,7 @@ namespace Logging
 		
 		// 主入口实现
 		public static void init(MCCSAPI api) {
-			mcapi = api;
+			mapi = api;
 			Console.OutputEncoding = Encoding.UTF8;
 			// 从固定路径读取配置文件
 			Logger logsetting = new Logger(LOGCONFIG);
@@ -95,6 +98,7 @@ namespace Logging
 			// 放置方块监听
 			api.addAfterActListener(EventKey.onPlacedBlock, x => {
 				var e = BaseEvent.getFrom(x) as PlacedBlockEvent;
+				if(e == null) return true;
 				string str = string.Format("{0} 玩家 {1} {2}在 {3} {4} 放置 {5} 方块。",
 					title(EventKey.onPlacedBlock), e.playername,
 					!e.isstand ? "悬空地":"",
@@ -111,6 +115,7 @@ namespace Logging
 			// 使用物品监听
 			api.addAfterActListener(EventKey.onUseItem, x => {
 				var e = BaseEvent.getFrom(x) as UseItemEvent;
+				if(e == null) return true;
 				if (e.RESULT) {
 					string str = string.Format("{0} 玩家 {1} {2}在 {3} {4} 使用 {5} 物品。",
 					title(EventKey.onUseItem), e.playername,
@@ -129,6 +134,7 @@ namespace Logging
 			// 破坏方块监听
 			api.addAfterActListener(EventKey.onDestroyBlock, x => {
 				var e = BaseEvent.getFrom(x) as DestroyBlockEvent;
+				if(e == null) return true;
 				string str = string.Format("{0} 玩家 {1} {2}在 {3} {4} 破坏 {5} 方块。",
 					title(EventKey.onDestroyBlock), e.playername,
 					!e.isstand ? "悬空地":"",
@@ -145,6 +151,7 @@ namespace Logging
 			// 玩家打开箱子
 			api.addAfterActListener(EventKey.onStartOpenChest, x => {
 					var e = BaseEvent.getFrom(x) as StartOpenChestEvent;
+					if(e == null) return true;
 					string str = string.Format("{0} 玩家 {1} {2}在 {3} {4} 打开 {5} 箱子。",
 					title(EventKey.onDestroyBlock), e.playername,
 					!e.isstand ? "悬空地":"",
@@ -161,6 +168,7 @@ namespace Logging
 			// 玩家打开木桶
 			api.addAfterActListener(EventKey.onStartOpenBarrel, x => {
 				var e = BaseEvent.getFrom(x) as StartOpenBarrelEvent;
+				if(e == null) return true;
 					string str = string.Format("{0} 玩家 {1} {2}在 {3} {4} 打开 {5} 木桶。",
 					title(EventKey.onDestroyBlock), e.playername,
 					!e.isstand ? "悬空地":"",
@@ -177,6 +185,7 @@ namespace Logging
 			// 玩家关闭箱子
 			api.addAfterActListener(EventKey.onStopOpenChest, x => {
 					var e = BaseEvent.getFrom(x) as StopOpenChestEvent;
+					if(e == null) return true;
 					string str = string.Format("{0} 玩家 {1} {2}在 {3} {4} 关闭 {5} 箱子。",
 					title(EventKey.onDestroyBlock), e.playername,
 					!e.isstand ? "悬空地":"",
@@ -193,12 +202,13 @@ namespace Logging
 			// 玩家关闭木桶
 			api.addAfterActListener(EventKey.onStopOpenBarrel, x => {
 				var e = BaseEvent.getFrom(x) as StopOpenBarrelEvent;
-					string str = string.Format("{0} 玩家 {1} {2}在 {3} {4} 关闭 {5} 木桶。",
-					title(EventKey.onDestroyBlock), e.playername,
-					!e.isstand ? "悬空地":"",
-					e.dimension,
-					Coordinator(e.position),
-					e.blockname);
+				if (e == null) return true;
+				string str = string.Format("{0} 玩家 {1} {2}在 {3} {4} 关闭 {5} 木桶。",
+					              title(EventKey.onDestroyBlock), e.playername,
+					              !e.isstand ? "悬空地" : "",
+					              e.dimension,
+					              Coordinator(e.position),
+					              e.blockname);
 				Console.WriteLine("{" + str);
 				if (logsetting.autoSave) {
 					var t = new Thread(() => logsetting.saveLine(str));
@@ -209,6 +219,7 @@ namespace Logging
 			// 放入取出物品
 			api.addAfterActListener(EventKey.onSetSlot, x => {
 				var e = BaseEvent.getFrom(x) as SetSlotEvent;
+				if(e == null) return true;
 				string str, str1, str2;
 				str1 = string.Format("{0} 玩家 {1} {2}在 {3} {4} 的 {5} 里的第 {6} 格",
 					title(EventKey.onSetSlot), e.playername,
@@ -232,6 +243,7 @@ namespace Logging
 			// 玩家切换维度
 			api.addAfterActListener(EventKey.onChangeDimension, x => {
 				var e = BaseEvent.getFrom(x) as ChangeDimensionEvent;
+				if(e == null) return true;
 				if (e.RESULT) {
 					string str = string.Format("{0} 玩家 {1} {2}切换维度至 {3} {4}。",
 						title(EventKey.onChangeDimension), e.playername,
@@ -249,6 +261,7 @@ namespace Logging
 			// 命名生物死亡
 			api.addAfterActListener(EventKey.onMobDie, x => {
 				var e = BaseEvent.getFrom(x) as MobDieEvent;
+				if(e == null) return true;
 				if (!string.IsNullOrEmpty(e.mobname)) {
 					string str = string.Format("{0} {1} {2} 在 {3} {4} 被 {5} 杀死了。",
 						title(EventKey.onMobDie),
@@ -268,6 +281,7 @@ namespace Logging
 			// 聊天消息
 			api.addAfterActListener(EventKey.onChat, x => {
 				var e = BaseEvent.getFrom(x) as ChatEvent;
+				if(e == null) return true;
 				if (e.chatstyle != "title") {
 					string str = string.Format("{0} {1} 说：{2}",
 						e.playername,

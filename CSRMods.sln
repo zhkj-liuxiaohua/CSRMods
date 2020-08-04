@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testcase", "Testcase\Testca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visitor", "Visitor\Visitor.csproj", "{EF71BE68-EB03-4529-8D30-5BCE06939166}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Vbtest", "Vbtest\Vbtest.vbproj", "{493FBFDD-1AB0-4578-B4FF-ED1DDE4C3576}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,5 +42,9 @@ Global
 		{EF71BE68-EB03-4529-8D30-5BCE06939166}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF71BE68-EB03-4529-8D30-5BCE06939166}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF71BE68-EB03-4529-8D30-5BCE06939166}.Release|Any CPU.Build.0 = Release|Any CPU
+		{493FBFDD-1AB0-4578-B4FF-ED1DDE4C3576}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{493FBFDD-1AB0-4578-B4FF-ED1DDE4C3576}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{493FBFDD-1AB0-4578-B4FF-ED1DDE4C3576}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{493FBFDD-1AB0-4578-B4FF-ED1DDE4C3576}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

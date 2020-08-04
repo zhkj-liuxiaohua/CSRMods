@@ -266,6 +266,7 @@ namespace CSR
 				Console.WriteLine("Empty struct data.");
 				return null;
 			}
+			try {
 			switch ((EventType)e.type) {
 				case EventType.onServerCmd:
 					return ServerCmdEvent.getFrom(e);
@@ -323,6 +324,7 @@ namespace CSR
 					// do nothing
 					break;
 			}
+			}catch(Exception ex){Console.WriteLine(ex.StackTrace);}
 			return null;
 		}
 		
