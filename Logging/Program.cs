@@ -8,6 +8,9 @@ using CSR;
 namespace Logging
 {
 	public class Logger {
+		private const string AUTOSAVEKEY = "autoSave";
+		private const string LOGPATHKEY = "logpath";
+		
 		private readonly bool mautoSave;
 		/// <summary>
 		/// 是否自动保存log
@@ -19,8 +22,8 @@ namespace Logging
 		/// </summary>
 		public string filepath {get{return mpath;}}
 		public Logger(string path) {
-			ConfigReader cf = new ConfigReader(path);
-			string extsave = cf.getValue("autoSave"), extpath = cf.getValue("path");
+			var cf = new ConfigReader(path);
+			string extsave = cf.getValue(AUTOSAVEKEY), extpath = cf.getValue(LOGPATHKEY);
 			if (!string.IsNullOrEmpty(extsave)) {
 				mautoSave = (extsave.ToLower() == "true");
 			} else
@@ -30,8 +33,8 @@ namespace Logging
 			} else
 				mpath = "";
 			// 写回原数据
-			cf.setValue("autoSave", ("" + mautoSave).ToLower());
-			cf.setValue("path", mpath);
+			cf.setValue(AUTOSAVEKEY, ("" + mautoSave).ToLower());
+			cf.setValue(LOGPATHKEY, mpath);
 			cf.save();
 			try {
 				if (!string.IsNullOrEmpty(mpath)) {
@@ -93,7 +96,7 @@ namespace Logging
 			mapi = api;
 			Console.OutputEncoding = Encoding.UTF8;
 			// 从固定路径读取配置文件
-			Logger logsetting = new Logger(LOGCONFIG);
+			var logsetting = new Logger(LOGCONFIG);
 			
 			// 放置方块监听
 			api.addAfterActListener(EventKey.onPlacedBlock, x => {
