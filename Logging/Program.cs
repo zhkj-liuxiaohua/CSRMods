@@ -120,11 +120,12 @@ namespace Logging
 				var e = BaseEvent.getFrom(x) as UseItemEvent;
 				if(e == null) return true;
 				if (e.RESULT) {
-					string str = string.Format("{0} 玩家 {1} {2}在 {3} {4} 使用 {5} 物品。",
+					string str = string.Format("{0} 玩家 {1} {2}对 {3} {4} 处的 {5} 方块使用 {6} 物品。",
 					title(EventKey.onUseItem), e.playername,
 					!e.isstand ? "悬空地":"",
 					e.dimension,
 					Coordinator(e.position),
+					e.blockname,
 					e.itemname);
 					Console.WriteLine("{" + str);
 					if (logsetting.autoSave) {
