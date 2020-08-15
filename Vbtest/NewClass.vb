@@ -36,7 +36,7 @@ REM 注意工程根命名空间为CSR，保证接口可被调用
 namespace Global.CSR
 
 Public Class Plugin
-
+	Shared mapi as MCCSAPI
 #Region "初始化通用接口，请勿随意更改"
     Public Shared Function onServerStart(pathandversion As String) As Int32
         Dim path as string, Version as string
@@ -46,9 +46,10 @@ Public Class Plugin
             path = pav.GetValue(0).ToString()
             Version = pav.GetValue(1).ToString()
             commercial = pav.GetValue(pav.Length - 1).Equals("1")
-            Dim api = New MCCSAPI(path, Version, commercial)
-            If Not IsNothing(api) Then
-                onStart(api)
+            mapi = New MCCSAPI(path, Version, commercial)
+            If Not IsNothing(mapi) Then
+                onStart(mapi)
+                GC.KeepAlive(mapi)
                 Return 0
             End If
         End If

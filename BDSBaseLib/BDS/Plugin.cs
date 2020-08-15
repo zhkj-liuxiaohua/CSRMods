@@ -12,28 +12,36 @@ namespace CSR
 {
 	partial class Plugin
 	{
+		private static MCCSAPI mapi = null;
+		/// <summary>
+		/// 静态api对象
+		/// </summary>
+		public static MCCSAPI api { get { return mapi; } }
 		#region 插件统一调用接口，请勿随意更改
-		// 采用第三方引用时候，全部由用户实现
-		/*
-		public static int onServerStart(string pathandversion) {
-			string path = null, version = null;
-			bool commercial = false;
-			string [] pav = pathandversion.Split(',');
-			if (pav.Length > 1) {
-				path = pav[0];
-				version = pav[1];
-				commercial = (pav[pav.Length - 1] == "1");
-				var api = new MCCSAPI(path, version, commercial);
-				if (api != null) {
-					onStart(api);
-					return 0;
-				}
-			}
-			Console.WriteLine("Load failed.");
-			return -1;
-		}
-		*/
+//		public static int onServerStart(string pathandversion) {
+//			string path = null, version = null;
+//			bool commercial = false;
+//			string [] pav = pathandversion.Split(',');
+//			if (pav.Length > 1) {
+//				path = pav[0];
+//				version = pav[1];
+//				commercial = (pav[pav.Length - 1] == "1");
+//				mapi = new MCCSAPI(path, version, commercial);
+//				if (mapi != null) {
+//					onStart(mapi);
+//					GC.KeepAlive(mapi);
+//					return 0;
+//				}
+//			}
+//			Console.WriteLine("Load failed.");
+//			return -1;
+//		}
 		#endregion
+
+		~Plugin()
+        {
+			//Console.WriteLine("[CSR Plugin] Ref released.");
+        }
 
 		#region 必要接口 onStart ，由用户实现
 		// public static void onStart(MCCSAPI api)

@@ -307,6 +307,11 @@ namespace CSR
 {
 	partial class Plugin
 	{
+		private static MCCSAPI mapi = null;
+		/// <summary>
+		/// 静态api对象
+		/// </summary>
+		public static MCCSAPI api { get { return mapi; } }
 		public static int onServerStart(string pathandversion) {
 			string path = null, version = null;
 			bool commercial = false;
@@ -315,9 +320,10 @@ namespace CSR
 				path = pav[0];
 				version = pav[1];
 				commercial = (pav[pav.Length - 1] == "1");
-				var api = new MCCSAPI(path, version, commercial);
-				if (api != null) {
-					onStart(api);
+				mapi = new MCCSAPI(path, version, commercial);
+				if (mapi != null) {
+					onStart(mapi);
+					GC.KeepAlive(mapi);
 					return 0;
 				}
 			}
