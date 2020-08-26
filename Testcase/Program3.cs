@@ -144,7 +144,7 @@ namespace Testcase
 							case "7":
 								{
 									string sa = api.getPlayerAbilities(uuid);
-									if (sa != null) {
+									if (!string.IsNullOrEmpty(sa)) {
 										var ser = new JavaScriptSerializer();
 										var ja = ser.Deserialize<Dictionary<string, object>>(sa);
 										var cja = new Dictionary<string, object>();
@@ -168,7 +168,7 @@ namespace Testcase
 							case "11":
 								{
 									var sa = api.getPlayerAttributes(uuid);
-									if (sa != null) {
+									if (!string.IsNullOrEmpty(sa)) {
 										var ser = new JavaScriptSerializer();
 										var ja = ser.Deserialize<Dictionary<string, object>>(sa);
 										var cja = new Dictionary<string, object>();
@@ -201,7 +201,7 @@ namespace Testcase
 							case "13":
 								{
 									var sa = api.getPlayerMaxAttributes(uuid);
-									if (sa != null) {
+									if (!string.IsNullOrEmpty(sa)) {
 										var ser = new JavaScriptSerializer();
 										var ja = ser.Deserialize<Dictionary<string, object>>(sa);
 										var cja = new Dictionary<string, object>();
