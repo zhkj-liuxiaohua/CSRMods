@@ -143,6 +143,7 @@ namespace Visitor
 				}
 				try {
 					File.WriteAllText("permissions.json", ser.Serialize(opl));
+					mapi.runcmd("permission reload");	// 重载权限配置
 					return true;
 				} catch{}
 			}
