@@ -63,7 +63,8 @@ namespace Testcase
 					"模拟执行me指令",
 					"后台指令输出hello",
 					"查询当前状态至后台",
-					"给32个白桦木"
+					"给32个白桦木",
+					"断开自身连接"
 				};
 			} else {
 				bts = new string[] {
@@ -73,7 +74,8 @@ namespace Testcase
 					"模拟执行me指令",
 					"后台指令输出hello",
 					"查询当前状态至后台",
-					"给32个白桦木",			// 以下是非社区版内容
+					"给32个白桦木",
+					"断开自身连接",					// 以下是非社区版内容
 					"穿墙能力开/关",
 					"传送至梦之故里大厅",
 					"跨维传送至末地祭坛",
@@ -138,10 +140,12 @@ namespace Testcase
 							case "6":
 								api.addPlayerItem(uuid, 17, 2, 32);
 								break;
-								
+							case "7":
+								api.disconnectClient(uuid, "这个消息来自测试");
+								break;
 								#region 以下部分为非社区版内容
 								
-							case "7":
+							case "8":
 								{
 									string sa = api.getPlayerAbilities(uuid);
 									if (!string.IsNullOrEmpty(sa)) {
@@ -156,16 +160,16 @@ namespace Testcase
 									}
 								}
 								break;
-							case "8":
+							case "9":
 								api.transferserver(uuid, "www.xiafox.com", 19132);
 								break;
-							case "9":
+							case "10":
 								api.teleport(uuid, 10, 99, 10, 2);
 								break;
-							case "10":
+							case "11":
 								api.logout(api.getPlayerAttributes(uuid));
 								break;
-							case "11":
+							case "12":
 								{
 									var sa = api.getPlayerAttributes(uuid);
 									if (!string.IsNullOrEmpty(sa)) {
@@ -195,10 +199,10 @@ namespace Testcase
 									}
 								}
 								break;
-							case "12":
+							case "13":
 								api.logout(api.getPlayerMaxAttributes(uuid));
 								break;
-							case "13":
+							case "14":
 								{
 									var sa = api.getPlayerMaxAttributes(uuid);
 									if (!string.IsNullOrEmpty(sa)) {
@@ -219,10 +223,10 @@ namespace Testcase
 									}
 								}
 								break;
-							case "14":
+							case "15":
 								api.logout(api.getPlayerSelectedItem(uuid));
 								break;
-							case "15":
+							case "16":
 								{
 									// tt - TAG_TYPE		标签数据类型，总计11种类型
 									// tv - TAG_VALUE		标签值，由类型决定
@@ -245,7 +249,7 @@ namespace Testcase
 									api.addPlayerItemEx(uuid, jitem);
 								}
 								break;
-							case "16":
+							case "17":
 								{
 									var jtem = "{" +
 									           "\"Offhand\": { \"tt\": 9, \"tv\": [" +
@@ -267,7 +271,7 @@ namespace Testcase
 									api.setPlayerItems(uuid, jtem);
 								}
 								break;
-							case "17":
+							case "18":
 								{
 									var its = api.getPlayerItems(uuid);
 									File.WriteAllText("pit.json", its);
@@ -293,7 +297,7 @@ namespace Testcase
 									api.runcmd("clear \"" + e.playername + "\"");
 								}
 								break;
-							case "18":
+							case "19":
 								{
 									try {
 										var its = File.ReadAllText("pit.json");
@@ -304,23 +308,23 @@ namespace Testcase
 									}
 								}
 								break;
-							case "19":
+							case "20":
 								{
 									var efs = api.getPlayerEffects(uuid);
 									tmpeff = efs;
 									Console.WriteLine(efs);
 								}
 								break;
-							case "20":
+							case "21":
 								api.setPlayerEffects(uuid, tmpeff);
 								break;
-							case "21":
+							case "22":
 								api.setPlayerBossBar(uuid, "欢迎使用NetRunner自定义血条！", ((float)(new Random().Next() % 1001)) / 1000.0f);
 								break;
-							case "22":
+							case "23":
 								api.removePlayerBossBar(uuid);
 								break;
-							case "23":
+							case "24":
 								{
 									int count = 0;
 									if (!sidecount.TryGetValue(uuid, out count)) {
@@ -337,13 +341,13 @@ namespace Testcase
 									api.setPlayerSidebar(uuid, e.playername + "的侧边栏", ser.Serialize(list));
 								}
 								break;
-							case "24":
+							case "25":
 								api.removePlayerSidebar(uuid);
 								break;
-							case "25":
+							case "26":
 								Console.WriteLine(api.getPlayerPermissionAndGametype(uuid));
 								break;
-							case "26":
+							case "27":
 								{
 									var st = api.getPlayerPermissionAndGametype(uuid);
 									var ser = new JavaScriptSerializer();
@@ -355,7 +359,7 @@ namespace Testcase
 									}
 								}
 								break;
-							case "27":
+							case "28":
 								{
 									var posa = e.XYZ;
 									var ser = new JavaScriptSerializer();
@@ -367,7 +371,7 @@ namespace Testcase
 									File.WriteAllText("st1.json", data);
 								}
 								break;
-							case "28":
+							case "29":
 								try {
 									var data = File.ReadAllText("st1.json");
 									var ser = new JavaScriptSerializer();
