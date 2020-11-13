@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net451</TargetFramework>
+    <AssemblyName>FSharpSample.csr</AssemblyName>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Library1.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Costura.Fody" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BDSBaseLib\BDSBaseLib.csproj" />
+  </ItemGroup>
+</Project>

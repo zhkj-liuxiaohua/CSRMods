@@ -1,0 +1,69 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\gaoxi\\Documents\\GitHub\\CSRMods\\FSharpSample\\FSharpSample.fsproj": {}
+  },
+  "projects": {
+    "C:\\Users\\gaoxi\\Documents\\GitHub\\CSRMods\\BDSBaseLib\\BDSBaseLib.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\gaoxi\\Documents\\GitHub\\CSRMods\\BDSBaseLib\\BDSBaseLib.csproj",
+        "projectName": "BDSBaseLib",
+        "projectPath": "C:\\Users\\gaoxi\\Documents\\GitHub\\CSRMods\\BDSBaseLib\\BDSBaseLib.csproj"
+      },
+      "frameworks": {
+        "net451": {}
+      }
+    },
+    "C:\\Users\\gaoxi\\Documents\\GitHub\\CSRMods\\FSharpSample\\FSharpSample.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\gaoxi\\Documents\\GitHub\\CSRMods\\FSharpSample\\FSharpSample.fsproj",
+        "projectName": "FSharpSample.csr",
+        "projectPath": "C:\\Users\\gaoxi\\Documents\\GitHub\\CSRMods\\FSharpSample\\FSharpSample.fsproj",
+        "packagesPath": "C:\\Users\\gaoxi\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gaoxi\\Documents\\GitHub\\CSRMods\\FSharpSample\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\gaoxi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net451"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net451": {
+            "projectReferences": {
+              "C:\\Users\\gaoxi\\Documents\\GitHub\\CSRMods\\BDSBaseLib\\BDSBaseLib.csproj": {
+                "projectPath": "C:\\Users\\gaoxi\\Documents\\GitHub\\CSRMods\\BDSBaseLib\\BDSBaseLib.csproj"
+              }
+            }
+          }
+        }
+      },
+      "frameworks": {
+        "net451": {
+          "dependencies": {
+            "Costura.Fody": {
+              "target": "Package",
+              "version": "[4.1.0, )",
+              "generatePathProperty": true
+            },
+            "FSharp.Core": {
+              "target": "Package",
+              "version": "[4.7.2, )",
+              "generatePathProperty": true
+            },
+            "System.ValueTuple": {
+              "target": "Package",
+              "version": "[4.4.0, )",
+              "generatePathProperty": true
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
