@@ -42,6 +42,9 @@ namespace HideSeed
 				case "1.16.40.2":
 					rva = 0x00386270;
 					break;
+				case "1.16.100.4":
+					rva = 0x00972F80;
+					break;
 			}
 			if (rva != 0) {
 				bool ret = api.cshook(rva,	// IDA StartGamePacket::write

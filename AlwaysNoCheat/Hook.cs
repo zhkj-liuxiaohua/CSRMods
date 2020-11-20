@@ -45,6 +45,9 @@ namespace AlwaysNoCheat
 				case "1.16.40.2":
 					rva = 0x0042D260;
 					break;
+				case "1.16.100.4":
+					rva = 0x00A1E8E0;
+					break;
 			}
 			if (rva != 0) {
 				bool ret = api.cshook(rva,	// IDA CommandRegistry::registerCommand
