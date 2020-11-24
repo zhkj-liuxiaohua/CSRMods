@@ -46,6 +46,7 @@ namespace AlwaysNoCheat
 					rva = 0x0042D260;
 					break;
 				case "1.16.100.4":
+				case "1.16.101.1":
 					rva = 0x00A1E8E0;
 					break;
 			}

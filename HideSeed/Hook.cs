@@ -43,6 +43,7 @@ namespace HideSeed
 					rva = 0x00386270;
 					break;
 				case "1.16.100.4":
+				case "1.16.101.1":
 					rva = 0x00972F80;
 					break;
 			}
