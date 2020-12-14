@@ -68,7 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NewClass.vb" />
-    <Compile Include="Properties\AssemblyInfo.vb" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BDSBaseLib\BDSBaseLib.csproj">

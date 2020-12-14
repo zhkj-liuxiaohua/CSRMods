@@ -62,7 +62,6 @@
     <Compile Include="BDS\Plugin.cs" />
     <Compile Include="ConfigReader.cs" />
     <Compile Include="MyClass.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BDS" />

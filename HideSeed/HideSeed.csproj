@@ -57,7 +57,6 @@
   <ItemGroup>
     <Compile Include="Hook.cs" />
     <Compile Include="Program5.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BDSBaseLib\BDSBaseLib.csproj">

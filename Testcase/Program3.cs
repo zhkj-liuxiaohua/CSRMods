@@ -64,7 +64,10 @@ namespace Testcase
 					"后台指令输出hello",
 					"查询当前状态至后台",
 					"给32个白桦木",
-					"断开自身连接"
+					"断开自身连接",
+					"发送一条原始文本至玩家聊天框",
+					"获取玩家计分板项money的值",
+					"设置玩家计分板项money的值+1"
 				};
 			} else {
 				bts = new string[] {
@@ -75,7 +78,10 @@ namespace Testcase
 					"后台指令输出hello",
 					"查询当前状态至后台",
 					"给32个白桦木",
-					"断开自身连接",					// 以下是非社区版内容
+					"断开自身连接",
+					"发送一条原始文本至玩家聊天框",
+					"获取玩家计分板项money的值",
+					"设置玩家计分板项money的值+1",					// 以下是非社区版内容
 					"穿墙能力开/关",
 					"传送至梦之故里大厅",
 					"跨维传送至末地祭坛",
@@ -143,9 +149,19 @@ namespace Testcase
 							case "7":
 								api.disconnectClient(uuid, "这个消息来自测试");
 								break;
+							case "8":
+								api.sendText(uuid, "这个文本来自测试");
+								break;
+							case "9":
+								Console.WriteLine("玩家{0}计分板money项数值为：{1}", e.playername, api.getscoreboard(uuid, "money"));
+								break;
+							case "10":
+								if (api.setscoreboard(uuid, "money", api.getscoreboard(uuid, "money") + 1))
+									Console.WriteLine("[setscoreboard] 已成功设置计分板项。");
+								break;
 								#region 以下部分为非社区版内容
 								
-							case "8":
+							case "11":
 								{
 									string sa = api.getPlayerAbilities(uuid);
 									if (!string.IsNullOrEmpty(sa)) {
@@ -160,16 +176,16 @@ namespace Testcase
 									}
 								}
 								break;
-							case "9":
+							case "12":
 								api.transferserver(uuid, "www.xiafox.com", 19132);
 								break;
-							case "10":
+							case "13":
 								api.teleport(uuid, 10, 99, 10, 2);
 								break;
-							case "11":
+							case "14":
 								api.logout(api.getPlayerAttributes(uuid));
 								break;
-							case "12":
+							case "15":
 								{
 									var sa = api.getPlayerAttributes(uuid);
 									if (!string.IsNullOrEmpty(sa)) {
@@ -199,10 +215,10 @@ namespace Testcase
 									}
 								}
 								break;
-							case "13":
+							case "16":
 								api.logout(api.getPlayerMaxAttributes(uuid));
 								break;
-							case "14":
+							case "17":
 								{
 									var sa = api.getPlayerMaxAttributes(uuid);
 									if (!string.IsNullOrEmpty(sa)) {
@@ -223,10 +239,10 @@ namespace Testcase
 									}
 								}
 								break;
-							case "15":
+							case "18":
 								api.logout(api.getPlayerSelectedItem(uuid));
 								break;
-							case "16":
+							case "19":
 								{
 									// tt - TAG_TYPE		标签数据类型，总计11种类型
 									// tv - TAG_VALUE		标签值，由类型决定
@@ -249,7 +265,7 @@ namespace Testcase
 									api.addPlayerItemEx(uuid, jitem);
 								}
 								break;
-							case "17":
+							case "20":
 								{
 									var jtem = "{" +
 									           "\"Offhand\": { \"tt\": 9, \"tv\": [" +
@@ -271,7 +287,7 @@ namespace Testcase
 									api.setPlayerItems(uuid, jtem);
 								}
 								break;
-							case "18":
+							case "21":
 								{
 									var its = api.getPlayerItems(uuid);
 									File.WriteAllText("pit.json", its);
@@ -297,7 +313,7 @@ namespace Testcase
 									api.runcmd("clear \"" + e.playername + "\"");
 								}
 								break;
-							case "19":
+							case "22":
 								{
 									try {
 										var its = File.ReadAllText("pit.json");
@@ -308,23 +324,23 @@ namespace Testcase
 									}
 								}
 								break;
-							case "20":
+							case "23":
 								{
 									var efs = api.getPlayerEffects(uuid);
 									tmpeff = efs;
 									Console.WriteLine(efs);
 								}
 								break;
-							case "21":
+							case "24":
 								api.setPlayerEffects(uuid, tmpeff);
 								break;
-							case "22":
+							case "25":
 								api.setPlayerBossBar(uuid, "欢迎使用NetRunner自定义血条！", ((float)(new Random().Next() % 1001)) / 1000.0f);
 								break;
-							case "23":
+							case "26":
 								api.removePlayerBossBar(uuid);
 								break;
-							case "24":
+							case "27":
 								{
 									int count = 0;
 									if (!sidecount.TryGetValue(uuid, out count)) {
@@ -341,13 +357,13 @@ namespace Testcase
 									api.setPlayerSidebar(uuid, e.playername + "的侧边栏", ser.Serialize(list));
 								}
 								break;
-							case "25":
+							case "28":
 								api.removePlayerSidebar(uuid);
 								break;
-							case "26":
+							case "29":
 								Console.WriteLine(api.getPlayerPermissionAndGametype(uuid));
 								break;
-							case "27":
+							case "30":
 								{
 									var st = api.getPlayerPermissionAndGametype(uuid);
 									var ser = new JavaScriptSerializer();
@@ -359,7 +375,7 @@ namespace Testcase
 									}
 								}
 								break;
-							case "28":
+							case "31":
 								{
 									var posa = e.XYZ;
 									var ser = new JavaScriptSerializer();
@@ -371,7 +387,7 @@ namespace Testcase
 									File.WriteAllText("st1.json", data);
 								}
 								break;
-							case "29":
+							case "32":
 								try {
 									var data = File.ReadAllText("st1.json");
 									var ser = new JavaScriptSerializer();
