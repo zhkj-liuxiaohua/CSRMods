@@ -130,6 +130,46 @@ namespace CSR
 		/// onLevelUp - 玩家升级
 		/// </summary>
 		public const string onLevelUp = "onLevelUp";
+		/// <summary>
+		/// onPistonPush - 活塞推方块事件
+		/// </summary>
+		public const string onPistonPush = "onPistonPush";
+		/// <summary>
+		/// onChestPair - 箱子合并事件
+		/// </summary>
+		public const string onChestPair = "onChestPair";
+		/// <summary>
+		/// onMobSpawnCheck - 生物生成检查事件
+		/// </summary>
+		public const string onMobSpawnCheck = "onMobSpawnCheck";
+		/// <summary>
+		/// onDropItem - 玩家丢物品事件
+		/// </summary>
+		public const string onDropItem = "onDropItem";
+		/// <summary>
+		/// onPickUpItem - 玩家捡起物品事件
+		/// </summary>
+		public const string onPickUpItem = "onPickUpItem";
+		/// <summary>
+		/// onScoreChanged - 计分板数值改变事件
+		/// </summary>
+		public const string onScoreChanged = "onScoreChanged";
+		/// <summary>
+		/// onScriptEngineInit - 官方脚本引擎初始化
+		/// </summary>
+		public const string onScriptEngineInit = "onScriptEngineInit";
+		/// <summary>
+		/// onScriptEngineLog - 官方脚本接收到日志
+		/// </summary>
+		public const string onScriptEngineLog = "onScriptEngineLog";
+		/// <summary>
+		/// onScriptEngineCmd - 官方脚本引擎执行指令
+		/// </summary>
+		public const string onScriptEngineCmd = "onScriptEngineCmd";
+		/// <summary>
+		/// onScoreboardInit - 系统计分板初始化
+		/// </summary>
+		public const string onScoreboardInit = "onScoreboardInit";
 	}
 
 	public enum EventType {
@@ -161,7 +201,17 @@ namespace CSR
 		onAttack = 25,
 		onLevelExplode = 26,
 		onEquippedArmor = 27,
-		onLevelUp = 28
+		onLevelUp = 28,
+		onPistonPush = 29,
+		onChestPair = 30,
+		onMobSpawnCheck = 31,
+		onDropItem = 32,
+		onPickUpItem = 33,
+		onScoreChanged = 34,
+		onScriptEngineInit = 35,
+		onScriptEngineLog = 36,
+		onScriptEngineCmd = 37,
+		onScoreboardInit = 38
 	}
 
 	public enum ActMode {
@@ -355,6 +405,26 @@ namespace CSR
 						return EquippedArmorEvent.getFrom(e);
 					case EventType.onLevelUp:
 						return LevelUpEvent.getFrom(e);
+					case EventType.onPistonPush:
+						return PistonPushEvent.getFrom(e);
+					case EventType.onChestPair:
+						return ChestPairEvent.getFrom(e);
+					case EventType.onMobSpawnCheck:
+						return MobSpawnCheckEvent.getFrom(e);
+					case EventType.onPickUpItem:
+						return PickUpItemEvent.getFrom(e);
+					case EventType.onDropItem:
+						return DropItemEvent.getFrom(e);
+					case EventType.onScoreChanged:
+						return ScoreChangedEvent.getFrom(e);
+					case EventType.onScriptEngineInit:
+						return ScriptEngineInitEvent.getFrom(e);
+					case EventType.onScriptEngineLog:
+						return ScriptEngineLogEvent.getFrom(e);
+					case EventType.onScriptEngineCmd:
+						return ScriptEngineCmdEvent.getFrom(e);
+					case EventType.onScoreboardInit:
+						return ScoreboardInitEvent.getFrom(e);
 					default:
 						// do nothing
 						break;
@@ -1092,6 +1162,7 @@ namespace CSR
 		protected int mentityid;
 		protected int mdimensionid;
 		protected IntPtr mnpc;
+		protected IntPtr mtrigger;
 		/// <summary>
 		/// NPC名字
 		/// </summary>
@@ -1128,6 +1199,10 @@ namespace CSR
 		/// NPC指针
 		/// </summary>
 		public IntPtr npcPtr { get { return mnpc; } }
+		/// <summary>
+		/// 触发者（玩家）指针
+		/// </summary>
+		public IntPtr triggerPtr { get { return mtrigger; } }
 		public static new NpcCmdEvent getFrom(Events e)
 		{
 			var le = createHead(e, EventType.onNpcCmd, typeof(NpcCmdEvent)) as NpcCmdEvent;
@@ -1143,6 +1218,7 @@ namespace CSR
 			le.mentityid = Marshal.ReadInt32(s, 48);
 			le.mdimensionid = Marshal.ReadInt32(s, 52);
 			le.mnpc = Marshal.ReadIntPtr(s, 56);
+			le.mtrigger = Marshal.ReadIntPtr(s, 64);
 			return le;
 		}
 	}
@@ -1408,6 +1484,349 @@ namespace CSR
 			soe.mplayer = Marshal.ReadIntPtr(s, 40);
 			soe.mlv = Marshal.ReadInt32(s, 48);
 			return soe;
+		}
+	}
+
+	/// <summary>
+	/// 箱子合并监听<br/>
+	/// 拦截可否：是
+	/// </summary>
+	public class ChestPairEvent : BaseEvent
+	{
+		protected string mdimension;
+		protected string mblockname;
+		protected string mtblockname;
+		protected BPos3 mposition;
+		protected BPos3 mtposition;
+		protected int mdimensionid;
+		protected short mblockid;
+		protected short mtblockid;
+
+		/// <summary>
+		/// 方块所在维度
+		/// </summary>
+		public string dimension { get { return mdimension; } }
+		/// <summary>
+		/// 方块所处维度ID
+		/// </summary>
+		public int dimensionid { get { return mdimensionid; } }
+		/// <summary>
+		/// 方块名称
+		/// </summary>
+		public string blockname { get { return mblockname; } }
+		/// <summary>
+		/// 方块所在位置
+		/// </summary>
+		public BPos3 position { get { return mposition; } }
+		/// <summary>
+		/// 方块ID
+		/// </summary>
+		public short blockid { get { return mblockid; } }
+		/// <summary>
+		/// 目标方块名称
+		/// </summary>
+		public string targetblockname { get { return mtblockname; } }
+		/// <summary>
+		/// 目标方块所在位置
+		/// </summary>
+		public BPos3 targetposition { get { return mtposition; } }
+		/// <summary>
+		/// 目标方块ID
+		/// </summary>
+		public short targetblockid { get { return mtblockid; } }
+
+		protected void loadData(IntPtr s)
+        {
+			// 此处为转换过程
+			mdimension = StrTool.readUTF8str((IntPtr)Marshal.ReadInt64(s, 0));
+			mblockname = StrTool.readUTF8str((IntPtr)Marshal.ReadInt64(s, 8));
+			mtblockname = StrTool.readUTF8str((IntPtr)Marshal.ReadInt64(s, 16));
+			mposition = (BPos3)Marshal.PtrToStructure(s + 24, typeof(BPos3));
+			mtposition = (BPos3)Marshal.PtrToStructure(s + 36, typeof(BPos3));
+			mdimensionid = Marshal.ReadInt32(s, 48);
+			mblockid = Marshal.ReadInt16(s, 52);
+			mtblockid = Marshal.ReadInt16(s, 54);
+		}
+		public static new ChestPairEvent getFrom(Events e)
+		{
+			var pe = createHead(e, EventType.onChestPair, typeof(ChestPairEvent)) as ChestPairEvent;
+			if (pe == null)
+				return pe;
+			IntPtr s = e.data;  // 此处为转换过程
+			pe.loadData(s);
+			return pe;
+		}
+	}
+	/// <summary>
+	/// 活塞推方块监听<br/>
+	/// 拦截可否：是
+	/// </summary>
+	public class PistonPushEvent : ChestPairEvent
+	{
+		protected byte mdirection;
+		/// <summary>
+		/// 朝向
+		/// </summary>
+		public byte direction { get { return mdirection; } }
+		public static new PistonPushEvent getFrom(Events e)
+		{
+			var pe = createHead(e, EventType.onPistonPush, typeof(PistonPushEvent)) as PistonPushEvent;
+			if (pe == null)
+				return pe;
+			IntPtr s = e.data;  // 此处为转换过程
+			pe.loadData(s);
+			pe.mdirection = Marshal.ReadByte(s, 56);
+			return pe;
+		}
+	}
+	/// <summary>
+	/// 生物生成规则检查监听<br/>
+	/// 拦截可否：是
+	/// </summary>
+	public class MobSpawnCheckEvent : BaseEvent
+    {
+		protected string mmobname;
+		protected string mdimension;
+		protected string mmobtype;
+		protected Vec3 mXYZ;
+		protected int mdimensionid;
+		protected IntPtr mmob;
+		/// <summary>
+		/// 生物名称
+		/// </summary>
+		public string mobname { get { return mmobname; } }
+		/// <summary>
+		/// 生物所在维度
+		/// </summary>
+		public string dimension { get { return mdimension; } }
+		/// <summary>
+		/// 生物类型
+		/// </summary>
+		public string mobtype { get { return mmobtype; } }
+		/// <summary>
+		/// 生物所在位置
+		/// </summary>
+		public Vec3 XYZ { get { return mXYZ; } }
+		/// <summary>
+		/// 生物所处维度ID
+		/// </summary>
+		public int dimensionid { get { return mdimensionid; } }
+		/// <summary>
+		/// 生物指针
+		/// </summary>
+		public IntPtr mobPtr { get { return mmob; } }
+		public static new MobSpawnCheckEvent getFrom(Events e)
+		{
+			var pe = createHead(e, EventType.onMobSpawnCheck, typeof(MobSpawnCheckEvent)) as MobSpawnCheckEvent;
+			if (pe == null)
+				return pe;
+			IntPtr s = e.data;  // 此处为转换过程
+			pe.mmobname = StrTool.readUTF8str((IntPtr)Marshal.ReadInt64(s));
+			pe.mdimension = StrTool.readUTF8str((IntPtr)Marshal.ReadInt64(s, 8));
+			pe.mmobtype = StrTool.readUTF8str((IntPtr)Marshal.ReadInt64(s, 16));
+			pe.mXYZ = (Vec3)Marshal.PtrToStructure(s + 24, typeof(Vec3));
+			pe.mdimensionid = Marshal.ReadInt32(s, 36);
+			pe.mmob = (IntPtr)Marshal.ReadInt64(s, 40);
+			return pe;
+		}
+	}
+	/// <summary>
+	/// 玩家拾取物品监听<br/>
+	/// 拦截可否：是
+	/// </summary>
+	public class PickUpItemEvent : PlayerEvent
+    {
+		protected string mitemname;
+		protected short mitemid;
+		protected short mitemaux;
+		/// <summary>
+		/// 物品名称
+		/// </summary>
+		public string itemname { get { return mitemname; } }
+		/// <summary>
+		/// 物品ID
+		/// </summary>
+		public short itemid { get { return mitemid; } }
+		/// <summary>
+		/// 物品特殊值
+		/// </summary>
+		public short itemaux { get { return mitemaux; } }
+
+		public static new PickUpItemEvent getFrom(Events e)
+		{
+			var puie = createHead(e, EventType.onPickUpItem, typeof(PickUpItemEvent)) as PickUpItemEvent;
+			if (puie == null)
+				return null;
+			IntPtr s = e.data;  // 此处为转换过程
+			puie.loadData(s);
+			puie.mitemname = StrTool.readUTF8str((IntPtr)Marshal.ReadInt64(s, 40));
+			puie.mitemid = Marshal.ReadInt16(s, 48);
+			puie.mitemaux = Marshal.ReadInt16(s, 50);
+			puie.mplayer = Marshal.ReadIntPtr(s, 56);
+			return puie;
+		}
+	}
+	/// <summary>
+	/// 玩家掉落物品监听<br/>
+	/// 拦截可否：是
+	/// </summary>
+	public class DropItemEvent : PlayerEvent {
+		protected string mitemname;
+		protected short mitemid;
+		protected short mitemaux;
+		/// <summary>
+		/// 物品名称
+		/// </summary>
+		public string itemname { get { return mitemname; } }
+		/// <summary>
+		/// 物品ID
+		/// </summary>
+		public short itemid { get { return mitemid; } }
+		/// <summary>
+		/// 物品特殊值
+		/// </summary>
+		public short itemaux { get { return mitemaux; } }
+
+		public static new DropItemEvent getFrom(Events e)
+		{
+			var puie = createHead(e, EventType.onDropItem, typeof(DropItemEvent)) as DropItemEvent;
+			if (puie == null)
+				return null;
+			IntPtr s = e.data;  // 此处为转换过程
+			puie.loadData(s);
+			puie.mitemname = StrTool.readUTF8str((IntPtr)Marshal.ReadInt64(s, 40));
+			puie.mitemid = Marshal.ReadInt16(s, 48);
+			puie.mitemaux = Marshal.ReadInt16(s, 50);
+			puie.mplayer = Marshal.ReadIntPtr(s, 56);
+			return puie;
+		}
+	}
+	/// <summary>
+	/// 计分板分数改变监听<br/>
+	/// 拦截可否：否
+	/// </summary>
+	public class ScoreChangedEvent : BaseEvent
+	{
+		protected string mobjectivename;
+		protected string mdisplayname;
+		protected long mscoreboardid;
+		protected int mscore;
+		/// <summary>
+		/// 计分板名称
+		/// </summary>
+		public string objectivename { get { return mobjectivename; } }
+		/// <summary>
+		/// 计分板显示名
+		/// </summary>
+		public string displayname { get { return mdisplayname; } }
+		/// <summary>
+		/// 计分板ID值
+		/// </summary>
+		public long scoreboardid { get { return mscoreboardid; } }
+		/// <summary>
+		/// 分数
+		/// </summary>
+		public int score { get { return mscore; } }
+
+		public static new ScoreChangedEvent getFrom(Events e)
+		{
+			var sce = createHead(e, EventType.onScoreChanged, typeof(ScoreChangedEvent)) as ScoreChangedEvent;
+			if (sce == null)
+				return null;
+			IntPtr s = e.data;  // 此处为转换过程
+			sce.mobjectivename = StrTool.readUTF8str((IntPtr)Marshal.ReadInt64(s, 0));
+			sce.mdisplayname = StrTool.readUTF8str((IntPtr)Marshal.ReadInt64(s, 8));
+			sce.mscoreboardid = Marshal.ReadInt64(s, 16);
+			sce.mscore = Marshal.ReadInt32(s, 24);
+			return sce;
+		}
+	}
+
+	/// <summary>
+	/// 官方脚本引擎初始化监听<br/>
+	/// 拦截可否：否
+	/// </summary>
+	public class ScriptEngineInitEvent : BaseEvent
+    {
+		protected IntPtr mjseptr;
+		/// <summary>
+		/// 脚本引擎指针
+		/// </summary>
+		public IntPtr jseptr { get { return mjseptr; } }
+		public static new ScriptEngineInitEvent getFrom(Events e)
+		{
+			var sce = createHead(e, EventType.onScriptEngineInit, typeof(ScriptEngineInitEvent)) as ScriptEngineInitEvent;
+			if (sce == null)
+				return null;
+			IntPtr s = e.data;  // 此处为转换过程
+			sce.mjseptr = Marshal.ReadIntPtr(s, 0);
+			return sce;
+		}
+	}
+
+	/// <summary>
+	/// 官方脚本引擎接收日志信息监听<br/>
+	/// 拦截可否：是
+	/// </summary>
+	public class ScriptEngineLogEvent : ScriptEngineInitEvent
+    {
+		protected string mlog;
+		/// <summary>
+		/// 官方脚本引擎输出信息（当脚本引擎开启日志功能时可捕获此内容）
+		/// </summary>
+		public string log { get { return mlog; } }
+		public static new ScriptEngineLogEvent getFrom(Events e)
+		{
+			var sce = createHead(e, EventType.onScriptEngineLog, typeof(ScriptEngineLogEvent)) as ScriptEngineLogEvent;
+			if (sce == null)
+				return null;
+			IntPtr s = e.data;  // 此处为转换过程
+			sce.mjseptr = Marshal.ReadIntPtr(s, 0);
+			sce.mlog = StrTool.readUTF8str(Marshal.ReadIntPtr(s, 8));
+			return sce;
+		}
+	}
+	/// <summary>
+	/// 官方脚本引擎执行指令监听<br/>
+	/// 拦截可否：是
+	/// </summary>
+	public class ScriptEngineCmdEvent : ScriptEngineInitEvent
+	{
+		protected string mcmd;
+		/// <summary>
+		/// 官方脚本引擎执行指令
+		/// </summary>
+		public string cmd { get { return mcmd; } }
+		public static new ScriptEngineCmdEvent getFrom(Events e)
+		{
+			var sce = createHead(e, EventType.onScriptEngineCmd, typeof(ScriptEngineCmdEvent)) as ScriptEngineCmdEvent;
+			if (sce == null)
+				return null;
+			IntPtr s = e.data;  // 此处为转换过程
+			sce.mjseptr = Marshal.ReadIntPtr(s, 0);
+			sce.mcmd = StrTool.readUTF8str(Marshal.ReadIntPtr(s, 8));
+			return sce;
+		}
+	}
+	/// <summary>
+	/// 系统计分板初始化监听<br/>
+	/// 拦截可否：否
+	/// </summary>
+	public class ScoreboardInitEvent : BaseEvent
+	{
+		protected IntPtr mscptr;
+		/// <summary>
+		/// 系统计分板指针
+		/// </summary>
+		public IntPtr scptr { get { return mscptr; } }
+		public static new ScoreboardInitEvent getFrom(Events e)
+		{
+			var sce = createHead(e, EventType.onScoreboardInit, typeof(ScoreboardInitEvent)) as ScoreboardInitEvent;
+			if (sce == null)
+				return null;
+			IntPtr s = e.data;  // 此处为转换过程
+			sce.mscptr = Marshal.ReadIntPtr(s, 0);
+			return sce;
 		}
 	}
 }

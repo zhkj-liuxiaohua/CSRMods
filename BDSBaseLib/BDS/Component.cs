@@ -579,12 +579,21 @@ namespace CSR
         const string PLAYER_GET_UUID = "player.get_uuid";
         const string PLAYER_GET_IPPORT = "player.get_ipport";
         const string PLAYER_ADD_LEVEL = "player.add_level";
+        const string PLAYER_GET_SCOREID = "player.get_scoreboardid";
+        const string PLAYER_CREATE_SCOREID = "player.create_scoreboardid";
+        const string LEVEL_GETPLFROM_AABB = "level.getplfrom_aabb";
+        #region 非社区内容
+        const string PLAYER_GET_STORAGEID = "player.get_storageid";
+        #endregion
 
         protected delegate bool PADDLEVEL(IntPtr p, int lv);
-        static AGET pgetHotbarContainer;
+        protected delegate long PGETSCOREID(IntPtr p);
+        static AGET pgetHotbarContainer, pgetServerStorageID;
         static AGET pgetUuid;
         static AGET pgetIPPort;
         static PADDLEVEL paddLevel;
+        static AGETSFROMAABB pgetplFromAABB;
+        static PGETSCOREID pgetScoreboardId, pcreateScoreboardId;
         static bool playerApiInited = false;
 
         static private bool initPlayerAPI(MCCSAPI api)
@@ -597,6 +606,13 @@ namespace CSR
                     pgetUuid = api.ConvertComponentFunc<AGET>(PLAYER_GET_UUID);
                     pgetIPPort = api.ConvertComponentFunc<AGET>(PLAYER_GET_IPPORT);
                     paddLevel = api.ConvertComponentFunc<PADDLEVEL>(PLAYER_ADD_LEVEL);
+                    pgetScoreboardId = api.ConvertComponentFunc<PGETSCOREID>(PLAYER_GET_SCOREID);
+                    pcreateScoreboardId = api.ConvertComponentFunc<PGETSCOREID>(PLAYER_CREATE_SCOREID);
+                    pgetplFromAABB = api.ConvertComponentFunc<AGETSFROMAABB>(LEVEL_GETPLFROM_AABB);
+                    if (api.COMMERCIAL)
+                    {   // 非社区内容
+                        pgetServerStorageID = api.ConvertComponentFunc<AGET>(PLAYER_GET_STORAGEID);
+                    }
                     playerApiInited = true;
                 }
                 else
@@ -657,6 +673,61 @@ namespace CSR
             {
                 paddLevel(ptr, lv);
             }
+        }
+        /// <summary>
+        /// 获取玩家对应计分板ID数值
+        /// </summary>
+        /// <returns>计分板ID值</returns>
+        public long getScoreboardId()
+        {
+            return (ptr != null && ptr != IntPtr.Zero) ?
+                pgetScoreboardId(ptr) : -1;
+        }
+        /// <summary>
+        /// 创建玩家对应计分板ID并获取其值
+        /// </summary>
+        /// <returns>计分板ID值</returns>
+        public long createScoreboardId()
+        {
+            return (ptr != null && ptr != IntPtr.Zero) ?
+                pcreateScoreboardId(ptr) : -1;
+        }
+        #region 非社区内容
+        public string StorageID
+        {
+            get
+            {
+                return (ptr != null && ptr != IntPtr.Zero) ?
+                    StrTool.c_str(pgetServerStorageID(ptr)) : string.Empty;
+            }
+        }
+        #endregion
+        /// <summary>
+        /// 从指定地图位置查询玩家指针列表
+        /// </summary>
+        /// <param name="api"></param>
+        /// <param name="did">维度ID</param>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="z1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="z2"></param>
+        /// <returns>玩家指针列表</returns>
+        public static ArrayList getplFromAABB(MCCSAPI api, int did, float x1, float y1, float z1, float x2, float y2, float z2)
+        {
+            if (pgetplFromAABB == null)
+                initEntityAPI(api);
+            IntPtr pv = pgetplFromAABB(did, x1, y1, z1, x2, y2, z2);
+            if (pv != null && pv != IntPtr.Zero)
+            {
+                try
+                {
+                    return ((Std_Vector)Marshal.PtrToStructure(pv, typeof(Std_Vector))).toList();
+                }
+                catch { }
+            }
+            return null;
         }
     }
 }

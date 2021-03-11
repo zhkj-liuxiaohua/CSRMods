@@ -103,7 +103,12 @@ namespace Testcase
 					"读当前权限与游戏模式至后台",
 					"切换op/visitor，生存/生存观察者模式",
 					"导出当前位置+长宽高x10的结构到st1.json",
-					"读结构st1.json到当前位置"
+					"读结构st1.json到当前位置",
+					"导出世界所有计分板分数至sc1.json",
+					"导入计分板分数sc1.json至世界",
+					"读本玩家周边3x3区块所有像素点至map.json",
+					"导出世界所有玩家数据至players.json",
+					"导入玩家数据players.json至本世界"
 				};
 			}
 			
@@ -395,7 +400,45 @@ namespace Testcase
 								} catch {
 								}
 								break;
-								
+							case "33":
+								try {
+									File.WriteAllText("sc1.json", api.getAllScore());
+								} catch{}
+								break;
+							case "34":
+								try {
+									var data = File.ReadAllText("sc1.json");
+									api.setAllScore(data);
+								} catch{}
+								break;
+							case "35":
+								try {
+									var d = "[";
+									for (int dx = -1; dx < 2; dx++) {
+										for (int dy = -1; dy < 2; dy++) {
+											int px = (int)(e.XYZ.x + dx * (16));
+											int py = (int)e.XYZ.y;
+											int pz = (int)(e.XYZ.y + dy * 16);
+											var data = api.getMapColors(px, py, pz, e.dimensionid);
+											d += data;
+											d += ",";
+										}
+									}
+									d = d.Substring(0, d.Length - 1) + "]";
+									File.WriteAllText("map.json", d);
+								} catch{}
+								break;
+							case "36":
+								try {
+									File.WriteAllText("players.json", api.exportPlayersData());
+								} catch{}
+								break;
+							case "37":
+								try {
+									var data = File.ReadAllText("players.json");
+									api.importPlayersData(data);
+								} catch{}
+								break;
 								#endregion
 							case "null":
 								Console.WriteLine("玩家 " + e.playername + " 主动取消了一个表单项。", gui.id);
