@@ -28,3 +28,7 @@
 #### Vbtest
 
 提供一个 VB.Net 的开发用例（一次性监听）
+
+#### NoAutoCompactionTip
+
+隐藏 “Running AutoCompaction ...” 这个提示，hook方式调用，需随版本更新
