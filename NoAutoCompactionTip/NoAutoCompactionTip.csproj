@@ -56,13 +56,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BDS\MCCSAPI.cs" />
+    <Compile Include="BDS\Plugin.cs" />
     <Compile Include="NoAutoCompactionTip.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BDSBaseLib\BDSBaseLib.csproj">
-      <Project>{cd9cca4e-2796-401a-9fc5-5e21165957c5}</Project>
-      <Name>BDSBaseLib</Name>
-    </ProjectReference>
+    <Folder Include="BDS" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
