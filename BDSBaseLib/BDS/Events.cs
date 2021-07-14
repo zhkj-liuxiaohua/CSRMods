@@ -265,10 +265,10 @@ namespace CSR
 
 	[StructLayoutAttribute(LayoutKind.Sequential)]
 	public struct Std_String {
-		public IntPtr data;
-		public ulong sd;
-		public ulong len;
-		public ulong uk3;
+		public IntPtr data;			// 数据区
+		public ulong sd;			// 短数据复用区
+		public ulong len;			// 字符串长度
+		public ulong alloclen;		// 实占空间
 	}
 
 
@@ -301,7 +301,7 @@ namespace CSR
 			{
 				if (s.len < 1)
 					return String.Empty;
-				if (s.len < 16)
+				if (s.alloclen < 16)
 				{
 					byte[] c = BitConverter.GetBytes((ulong)s.data);
 					byte[] d = BitConverter.GetBytes(s.sd);
@@ -1314,6 +1314,7 @@ namespace CSR
 		protected string mactortype;
 		protected Vec3 mactorpos;
 		protected IntPtr mattacked;
+		protected int mdmcase;
 		/// <summary>
 		/// 被攻击实体名称
 		/// </summary>
@@ -1330,6 +1331,10 @@ namespace CSR
 		/// 被击者实体指针
 		/// </summary>
 		public IntPtr attackedentityPtr { get { return mattacked; } }
+		/// <summary>
+		/// 伤害类型
+		/// </summary>
+		public int dmcase { get { return mdmcase; } }
 		public static new AttackEvent getFrom(Events e)
 		{
 			var ate = createHead(e, EventType.onAttack, typeof(AttackEvent)) as AttackEvent;
@@ -1342,6 +1347,7 @@ namespace CSR
 			ate.mactorpos = (Vec3)Marshal.PtrToStructure(s + 56, typeof(Vec3));
 			ate.mplayer = Marshal.ReadIntPtr(s, 72);
 			ate.mattacked = Marshal.ReadIntPtr(s, 80);
+			ate.mdmcase = Marshal.ReadInt32(s, 88);
 			return ate;
 		}
 	}

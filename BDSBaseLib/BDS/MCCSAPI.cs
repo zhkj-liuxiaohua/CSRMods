@@ -126,9 +126,9 @@ namespace CSR
 		}
 		public enum CommandCheatFlag : byte {
 			Cheat = 0,
-			NotCheat = 0x40
+			NotCheat = 0x80
 		}
-		private delegate void SETCOMMANDDESCRIBEFUNC(string key, string description, CommandPermissionLevel level, byte flag1, byte flag2);
+		private delegate void SETCOMMANDDESCRIBEFUNC(string key, string description, CommandPermissionLevel level, short flag1, short flag2);
 		private SETCOMMANDDESCRIBEFUNC csetCommandDescribe;
 		private delegate bool RUNCMDFUNC(string cmd);
 		private RUNCMDFUNC cruncmd, cremovePlayerBossBar, cremovePlayerSidebar, csetAllScore, cimportPlayersData;
@@ -173,6 +173,8 @@ namespace CSR
 		private SETSCOREBOARDVALUEFUNC csetscoreboardValue;
 		private delegate bool SETSERVERMOTD(string motd, bool isShow);
 		private SETSERVERMOTD csetServerMotd;
+		private delegate Std_String GETITEMRAWNAME(int id);
+		private GETITEMRAWNAME cgetItemRawname;
 		/// <summary>
 		/// 脚本引擎执行功能结果回调
 		/// </summary>
@@ -258,6 +260,7 @@ namespace CSR
 			cgetscoreById = Invoke<GETSCOREBYID>("getscoreById");
 			csetscoreById = Invoke<SETSCOREBYID>("setscoreById");
 			cpostTick = Invoke<POSTTICK>("postTick");
+			cgetItemRawname = Invoke<GETITEMRAWNAME>("getItemRawname");
 			ccshook = Invoke<CSHOOKFUNC>("cshook");
 			ccsunhook = Invoke<CSUNHOOKFUNC>("csunhook");
 			cdlsym = Invoke<DLSYMFUNC>("dlsym");
@@ -450,7 +453,7 @@ namespace CSR
 		/// <param name="level">执行要求等级</param>
 		/// <param name="flag1">命令类型1</param>
 		/// <param name="flag2">命令类型2</param>
-		public void setCommandDescribeEx(string key, string description, CommandPermissionLevel level, byte flag1, byte flag2) {
+		public void setCommandDescribeEx(string key, string description, CommandPermissionLevel level, short flag1, short flag2) {
 			if (csetCommandDescribe != null)
 				csetCommandDescribe(key, description, level, flag1, flag2);
 		}
@@ -460,7 +463,7 @@ namespace CSR
 		/// <param name="key">命令</param>
 		/// <param name="description">描述</param>
 		public void setCommandDescribe(string key, string description) {
-			setCommandDescribeEx(key, description, CommandPermissionLevel.Any, (byte)CommandCheatFlag.NotCheat, (byte)CommandVisibilityFlag.Visible);
+			setCommandDescribeEx(key, description, CommandPermissionLevel.Any, (short)CommandCheatFlag.NotCheat, (short)CommandVisibilityFlag.Visible);
 		}
 		
 		/// <summary>
@@ -1025,7 +1028,16 @@ namespace CSR
 			return (csetscoreById != null) ? csetscoreById(id, objname, count) :
 				0;
 		}
-
+		/// <summary>
+		/// 获取物品原始标识字符
+		/// </summary>
+		/// <param name="id">物品id</param>
+		/// <returns>物品原始标识字符</returns>
+		public string getItemRawname(int id)
+        {
+			return (cgetItemRawname != null) ?  StrTool.c_str(cgetItemRawname(id)) :
+				"unknow";
+		}
 		// 底层相关
 
 		/// <summary>

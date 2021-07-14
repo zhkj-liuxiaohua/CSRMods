@@ -40,10 +40,14 @@ namespace NoAutoCompactionTip
 			mapi = api;
 			
 			rva_bedlogs["1.16.220.02"] = 0x01051430;	// IDA BedrockLog::log
-			rva_docalls["1.16.220.02"] = 0xD50380;		// IDA "Running AutoCompaction..."
 			rva_bedlogs["1.16.221.01"] = 0x01051590;
+			rva_bedlogs["1.17.0.03"] = 0x0134F520;
+			rva_bedlogs["1.17.2.01"] = 0x0134EFF0;
+			rva_bedlogs["1.17.10.04"] = 0x0137BF70;
+			rva_docalls["1.16.220.02"] = 0xD50380;		// IDA "Running AutoCompaction..."
 			rva_docalls["1.16.221.01"] = 0xD50510;
-			
+			rva_docalls["1.17.2.01"] = 0xFC19D0;
+			rva_docalls["1.17.10.04"] = 0xFAE630;
 			int rva = (int)rva_docalls[api.VERSION];
 			if (rva != 0)
 				if (api.cshook(rva, Marshal.GetFunctionPointerForDelegate(hook_task_do_call), out f_do_call)) {

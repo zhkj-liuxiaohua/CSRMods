@@ -101,7 +101,7 @@ namespace Testcase
 					"显示一个带统计的自定义侧边栏",
 					"移除自定义侧边栏",
 					"读当前权限与游戏模式至后台",
-					"切换op/visitor，生存/生存观察者模式",
+					"切换op/visitor，生存/创造模式",
 					"导出当前位置+长宽高x10的结构到st1.json",
 					"读结构st1.json到当前位置",
 					"导出世界所有计分板分数至sc1.json",
@@ -374,7 +374,7 @@ namespace Testcase
 									var ser = new JavaScriptSerializer();
 									var t = ser.Deserialize<Dictionary<string, object>>(st);
 									if (t != null) {
-										t["gametype"] = (int)(t["gametype"]) == 0 ? 3 : 0;
+										t["gametype"] = (int)(t["gametype"]) == 0 ? 1 : 0;
 										t["permission"] = (int)(t["permission"]) == 0 ? 2 : 0;
 										api.setPlayerPermissionAndGametype(uuid, ser.Serialize(t));
 									}

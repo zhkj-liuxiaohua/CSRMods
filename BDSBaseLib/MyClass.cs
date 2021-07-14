@@ -22,12 +22,12 @@ namespace BDSBaseLib
 namespace CSR {
 	partial class Plugin {
 		// TODO
-		public static int onServerStart(string pathandversion) {
-			Console.WriteLine("----Base CSR api is loaded----");
-			return -1;
-		}
+		//public static int onServerStart(string pathandversion) {
+		//	Console.WriteLine("----Base CSR api is loaded----");
+		//	return -1;
+		//}
 		// TODO
-		public static void onStart(MCCSAPI api) {
-		}
+		//public static void onStart(MCCSAPI api) {
+		//}
 	}
 }
