@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HideSeed", "HideSeed\HideSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoAutoCompactionTip", "NoAutoCompactionTip\NoAutoCompactionTip.csproj", "{B31F56C3-CA13-42BA-8B6D-ACEA726E277E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntiWsCmd", "AntiWsCmd\AntiWsCmd.csproj", "{BC9D245C-2C25-4AA8-B0AC-C1E6462CA585}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,5 +60,9 @@ Global
 		{B31F56C3-CA13-42BA-8B6D-ACEA726E277E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B31F56C3-CA13-42BA-8B6D-ACEA726E277E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B31F56C3-CA13-42BA-8B6D-ACEA726E277E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC9D245C-2C25-4AA8-B0AC-C1E6462CA585}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC9D245C-2C25-4AA8-B0AC-C1E6462CA585}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC9D245C-2C25-4AA8-B0AC-C1E6462CA585}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC9D245C-2C25-4AA8-B0AC-C1E6462CA585}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
