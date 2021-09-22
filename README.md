@@ -1,6 +1,10 @@
 # CSRMods
 构建基于BDSNetRunner的插件示例
 
+注：由于github官方策略限制，本项目源码将迁移至
+
+https://mzgl.coding.net/public/csrmods/CSRMods/git/files
+
 ### BDSBaseLib
 
 提供公共方法的CSR通用的BDS API接口，动态更新时只需更新此处
